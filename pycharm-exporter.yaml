@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pachyderm-exporter
+  labels:
+    app: pachyderm-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pachyderm-exporter
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: '9425'
+        prometheus.io/scrape: 'true'
+        prometheus.io/path: '/metrics'
+      labels:
+        app: pachyderm-exporter
+    spec:
+      containers:
+      - name: pachyderm-exporter
+        image: button/pachyderm-exporter:latest
+        command: ['pachyderm_exporter', '--pachyderm.address', 'pachd:650']
+        ports:
+        - containerPort: 9425
+          name: http
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: pychyderm-exporter
+  labels:
+    app: pachyderm-exporter
+spec:
+  selector:
+    app: pachyderm-exporter
+  ports:
+  - protocol: TCP
+    port: 9425
+    name: http
