@@ -9,6 +9,11 @@ kubectl apply -f https://github.com/DjankoSkalidge/pychyderm-exporter/blob/maste
 ```
 This will create a service, and a deployment with one pod.
 
+If you just want to create a single pod, use the following command:
+```shell script
+kubectl apply -f https://github.com/DjankoSkalidge/pychyderm-exporter/blob/master/deployment/pychyderm-exporter-pod.yaml
+```
+
 ## Metrics
 The following metrics will be exported:
  - The status of the last job for every pipeline. <pipeline_name>_last_job
