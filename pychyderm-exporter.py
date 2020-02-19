@@ -4,7 +4,6 @@ import time
 import pachypy
 import pandas as pd
 
-
 pipelines = pd.DataFrame()
 gauges = dict()
 succescounters = dict()
@@ -31,11 +30,13 @@ def main():
     args = parse_args()
     port = args.port
     host = args.host
+
     pachyclient = pachypy.PachydermClient(host=host, port=port)
     start_http_server(port=port)
     pipelines = pachyclient.list_pipelines()
     for index, pipeline in pipelines.iterrows():
-        g = Gauge("{}_last_job".format(pipeline["pipeline"]), "Last Job status of pipeline {}".format(pipeline["pipeline"]))
+        g = Gauge("{}_last_job".format(pipeline["pipeline"]),
+                  "Last Job status of pipeline {}".format(pipeline["pipeline"]))
         gauges[pipeline["pipeline"]] = g
         succescounters[pipeline["pipeline"]] = pipeline["jobs_success"]
         failcounters[pipeline["pipeline"]] = pipeline["jobs_failure"]
@@ -46,7 +47,7 @@ def main():
 
 def parse_args(args=None):
     parser = argparse.ArgumentParser(description='Prometheus exporter for PachyDerm metrics')
-    parser.add_argument("-h", "--host", type=str, default="pachd", help="Host of pachd")
+    parser.add_argument("-i", "--host", type=str, default="pachd", help="Host of pachd")
     parser.add_argument("-p", "--port", type=int, default=9426,
                         help="port number")
     return parser.parse_args(args=args)
