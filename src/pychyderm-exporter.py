@@ -30,7 +30,7 @@ def main():
     port = args.port
     host = args.host
 
-    pachyclient = python_pachyderm.Client(host=host, port=port)
+    pachyclient = python_pachyderm.Client().new_from_pachd_address("{}:{}".format(host, port))
     start_http_server(port=9426)
     pipelines = pachyclient.list_pipeline().pipeline_info
     for pipeline in pipelines:
